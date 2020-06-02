@@ -8,6 +8,7 @@
 body {
   font-family: "Montserrat", sans-serif;
   font-size: 16px;
+  color: #fff;
 }
 
 /*---------- RESUABLE COMPONENTS ----------*/
@@ -23,8 +24,13 @@ h1 {
   -webkit-text-fill-color: transparent;
 }
 
-section {
-  margin: 40px 0;
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
 }
 
 /*---------- SEARCH SECTION ----------*/
@@ -86,6 +92,7 @@ input[type="text"]:focus {
   align-items: center;
   flex-direction: column;
   background-image: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+  min-height: 50vh;
 }
 
 .ride {
@@ -146,4 +153,50 @@ input[type="text"]:focus {
 
 .arrow i {
   font-size: 75px;
+}
+
+/*---------- PATH SECTION ----------*/
+
+footer {
+  background-color: #151515;
+  padding: 20px;
+  font-size: 90%;
+}
+
+.social-links {
+  display: flex;
+  width: 20%;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.social-links li:last-child {
+  margin-right: 0px;
+}
+
+.social-links li a:link,
+.social-links li a:visited {
+  font-size: 34px;
+  vertical-align: middle;
+}
+
+.ion-social-linkedin,
+.ion-social-github {
+  transition: color 0.2s;
+}
+
+.ion-social-linkedin:hover {
+  color: #007bb5;
+}
+
+.ion-social-github:hover {
+  color: #f4cbb2;
+}
+
+footer p {
+  color: #888;
+  text-align: center;
+  font-size: 90%;
+  margin-top: 20px;
 }
