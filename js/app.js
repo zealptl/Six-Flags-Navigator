@@ -1,78 +1,3 @@
-/*---------- GRAPH CLASS AND ITS ALGORITHMS ----------*/
-class Graph {
-  constructor(graph) {
-    this.graph = graph;
-  }
-
-  shortestDistanceNode(distances, visted) {
-    let shortest = null;
-
-    for (let node in distances) {
-      let currIsShortest =
-        shortest === null || distances[node] < distances[shortest];
-      if (currIsShortest && !visted.includes(node)) {
-        shortest = node;
-      }
-    }
-
-    return shortest;
-  }
-
-  dijkstraShortestPath(startNode, endNode) {
-    let distances = {};
-    distances[endNode] = "Infinity";
-    distances = Object.assign(distances, this.graph[startNode]);
-
-    let parents = { endNode: null };
-    for (let child in this.graph[startNode]) {
-      parents[child] = startNode;
-    }
-
-    let visted = [];
-
-    let node = this.shortestDistanceNode(distances, visted);
-
-    while (node) {
-      let distance = distances[node];
-      let children = this.graph[node];
-
-      for (let child in children) {
-        if (String(child) === String(startNode)) {
-          continue;
-        } else {
-          let newDistance = distance + children[child];
-          if (!distances[child] || distances[child] > newDistance) {
-            distances[child] = newDistance;
-            parents[child] = node;
-          }
-        }
-      }
-
-      visted.push(node);
-      node = this.shortestDistanceNode(distances, visted);
-    }
-
-    let shortestPath = [endNode];
-    let parent = parents[endNode];
-
-    while (parent) {
-      shortestPath.push(parent);
-      parent = parents[parent];
-    }
-
-    shortestPath.reverse();
-
-    let results = {
-      distance: distances[endNode],
-      path: shortestPath,
-    };
-
-    return results;
-  }
-}
-
-/*---------- UI CONTROLLER ----------*/
-
 /*---------- DATA ----------*/
 class Data {
   constructor() {
@@ -172,6 +97,117 @@ class Data {
       },
     };
   }
+
+  getRideNameColor(rideNum) {
+    return this.maxThrillRidesUI[rideNum];
+  }
+
+  getRideHTML(name, curr) {
+    return `<div class="ride" id="ride">
+    <div class="ride-name ride-${curr}" id="rideName">
+      <h3>${name}</h3>
+    </div>
+    <div class="ride-img" id="rideImg">
+      <img src="./assets/ride_logo_${curr}.jpg" alt="" />
+    </div>
+  </div>`;
+  }
+
+  getArrowHTML() {
+    return `<div class="arrow" id="arrow">
+    <i class="ion-ios-arrow-thin-down"></i>
+  </div>`;
+  }
+}
+
+/*---------- GRAPH CLASS AND ITS ALGORITHMS ----------*/
+class Graph {
+  constructor(graph) {
+    this.graph = graph;
+  }
+
+  shortestDistanceNode(distances, visted) {
+    let shortest = null;
+
+    for (let node in distances) {
+      let currIsShortest =
+        shortest === null || distances[node] < distances[shortest];
+      if (currIsShortest && !visted.includes(node)) {
+        shortest = node;
+      }
+    }
+
+    return shortest;
+  }
+
+  dijkstraShortestPath(startNode, endNode) {
+    let distances = {};
+    distances[endNode] = "Infinity";
+    distances = Object.assign(distances, this.graph[startNode]);
+
+    let parents = { endNode: null };
+    for (let child in this.graph[startNode]) {
+      parents[child] = startNode;
+    }
+
+    let visted = [];
+
+    let node = this.shortestDistanceNode(distances, visted);
+
+    while (node) {
+      let distance = distances[node];
+      let children = this.graph[node];
+
+      for (let child in children) {
+        if (String(child) === String(startNode)) {
+          continue;
+        } else {
+          let newDistance = distance + children[child];
+          if (!distances[child] || distances[child] > newDistance) {
+            distances[child] = newDistance;
+            parents[child] = node;
+          }
+        }
+      }
+
+      visted.push(node);
+      node = this.shortestDistanceNode(distances, visted);
+    }
+
+    let shortestPath = [endNode];
+    let parent = parents[endNode];
+
+    while (parent) {
+      shortestPath.push(parent);
+      parent = parents[parent];
+    }
+
+    shortestPath.reverse();
+
+    return shortestPath;
+  }
+}
+
+/*---------- UI CONTROLLER ----------*/
+class UICtrl {
+  showDijkstraPath(data, results) {
+    for (let i = 0; i < results.length; i++) {
+      let ride = data.getRideNameColor(results[i]);
+      let rideList = document.getElementById("rideList");
+
+      let rideHTML = data.getRideHTML(ride.name, results[i]);
+      rideList.insertAdjacentHTML("beforeend", rideHTML);
+
+      document.querySelector(".ride-" + results[i]).style.background =
+        ride.color;
+
+      if (results[i] == results[results.length - 1]) {
+        continue;
+      }
+      let arrowHtml = data.getArrowHTML();
+      rideList.insertAdjacentHTML("beforeend", arrowHtml);
+    }
+  }
 }
 
 /*---------- DRIVER CODE ----------*/
@@ -188,4 +224,25 @@ let app = (function () {
       modal.style.display = "none";
     }
   };
+
+  /*-- GRAPH ALGOS --*/
+  let uiCtrl = new UICtrl();
+  let data = new Data();
+  let sixFlagsMap = new Graph(data.maxThrillRides);
+
+  document.getElementById("searchBtn").addEventListener("click", () => {
+    let pathType = document.getElementById("pathType").value;
+    if (pathType == "a-to-b") {
+      let rideNums = document.getElementById("inputField").value;
+      rideNums = rideNums.split(",").map(function (item) {
+        return item.trim();
+      });
+
+      let path = sixFlagsMap.dijkstraShortestPath(rideNums[0], rideNums[1]);
+
+      uiCtrl.showDijkstraPath(data, path);
+    } else if (pathType == "from-a") {
+      console.log("FROM A");
+    }
+  });
 })();
