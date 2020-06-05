@@ -42,31 +42,33 @@
     <section class="section-search">
       <h1>Six Flags Navigator</h1>
       <div class="search-form">
-        <select name="type-of-path" class="type-of-path">
+        <select name="path-type" class="path-type" id="pathType">
           <option value="a-to-b">A to B</option>
           <option value="from-a">Start at</option>
         </select>
         <input
           type="text"
           class="input-field"
+          id="inputField"
           placeholder="Enter appropriate query"
         />
-        <button class="search-btn">
+        <button class="search-btn" id="searchBtn">
           <i class="ion-ios-search-strong search-icon"></i>
         </button>
       </div>
     </section>
 
-    <section class="section-path">
-      <!-- <div class="ride">
-        <div class="ride-name">
+    <section class="section-path" id="sectionPath">
+      <div class="ride-list" id="rideList"></div>
+      <!-- <div class="ride" id="ride">
+        <div class="ride-name" id="rideName">
           <h3>Batman: The Ride</h3>
         </div>
-        <div class="ride-img">
+        <div class="ride-img" id="rideImg">
           <img src="./assets/ride_logo_1.jpg" alt="" />
         </div>
       </div>
-      <div class="arrow">
+      <div class="arrow" id="arrow">
         <i class="ion-ios-arrow-thin-down"></i>
       </div> -->
     </section>

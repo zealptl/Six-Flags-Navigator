@@ -97,7 +97,7 @@ button:focus {
   margin: 0 auto;
 }
 
-.type-of-path,
+.path-type,
 .input-field,
 .search-btn {
   padding: 10px;
@@ -110,7 +110,7 @@ button:focus {
   transition: all 0.2s ease;
 }
 
-.type-of-path {
+.path-type {
   width: 100px;
 }
 
@@ -122,7 +122,7 @@ button:focus {
   width: 40px;
 }
 
-.type-of-path:hover,
+.path-type:hover,
 input[type="text"]:focus,
 .search-btn:hover {
   border: 2px solid #ea7752;
