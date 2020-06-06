@@ -1,6 +1,7 @@
 /*---------- DATA ----------*/
 class Data {
   constructor() {
+    // Adjecency list for max thrill rides
     this.maxThrillRides = {
       1: { 4: 3, 5: 11, 10: 4, 13: 11 },
       2: { 5: 12, 6: 6, 13: 15, 14: 14 },
@@ -19,6 +20,7 @@ class Data {
       15: { 8: 4 },
     };
 
+    // name and gradient color for each of the max thrill rides
     this.maxThrillRidesUI = {
       1: {
         name: "Batman: The Ride",
@@ -98,10 +100,12 @@ class Data {
     };
   }
 
+  // Function to retrieve name and color from maxThrillUI object
   getRideNameColor(rideNum) {
     return this.maxThrillRidesUI[rideNum];
   }
 
+  // Function to get HTML with appropriate name and class
   getRideHTML(name, curr) {
     return `<div class="ride" id="ride">
     <div class="ride-name ride-${curr}" id="rideName">
@@ -113,6 +117,7 @@ class Data {
   </div>`;
   }
 
+  // Function to get HTML for next ride arrow
   getArrowHTML() {
     return `<div class="arrow" id="arrow">
     <i class="ion-ios-arrow-thin-down"></i>
@@ -122,10 +127,12 @@ class Data {
 
 /*---------- GRAPH CLASS AND ITS ALGORITHMS ----------*/
 class Graph {
+  // Sets the adjacency list as the graph
   constructor(graph) {
     this.graph = graph;
   }
 
+  // Helper method to get the shortest distance for dijkstra's algorithm
   shortestDistanceNode(distances, visted) {
     let shortest = null;
 
@@ -140,6 +147,7 @@ class Graph {
     return shortest;
   }
 
+  // Function to find the shortest path between two nodes using Dijkstra's algorithm.
   dijkstraShortestPath(startNode, endNode) {
     let distances = {};
     distances[endNode] = "Infinity";
@@ -190,7 +198,8 @@ class Graph {
 
 /*---------- UI CONTROLLER ----------*/
 class UICtrl {
-  showDijkstraPath(data, results) {
+  // Function to show UI objects depending up the result of a graph algorithm
+  showPath(data, results) {
     for (let i = 0; i < results.length; i++) {
       let ride = data.getRideNameColor(results[i]);
       let rideList = document.getElementById("rideList");
@@ -212,7 +221,7 @@ class UICtrl {
 
 /*---------- DRIVER CODE ----------*/
 let app = (function () {
-  /*-- HOW TO MODAL --*/
+  // Controls the pop up how to modal
   let modal = document.getElementById("howToModal");
   let btn = document.getElementById("howToBtn");
   let closeBtn = document.getElementById("closeBtn");
@@ -225,14 +234,22 @@ let app = (function () {
     }
   };
 
-  /*-- GRAPH ALGOS --*/
+  // Controls the graph algorithms and shows appropriate UI elements
   let uiCtrl = new UICtrl();
   let data = new Data();
   let sixFlagsMap = new Graph(data.maxThrillRides);
 
   document.getElementById("searchBtn").addEventListener("click", () => {
     let pathType = document.getElementById("pathType").value;
+
     if (pathType == "a-to-b") {
+      showDijkstraPath();
+    } else if (pathType == "from-a") {
+      console.log("FROM A");
+    }
+
+    // Function to show the appropriate UI elements for the result of dijkstra's shortest path algorithm
+    function showDijkstraPath() {
       let rideNums = document.getElementById("inputField").value;
       rideNums = rideNums.split(",").map(function (item) {
         return item.trim();
@@ -240,9 +257,7 @@ let app = (function () {
 
       let path = sixFlagsMap.dijkstraShortestPath(rideNums[0], rideNums[1]);
 
-      uiCtrl.showDijkstraPath(data, path);
-    } else if (pathType == "from-a") {
-      console.log("FROM A");
+      uiCtrl.showPath(data, path);
     }
   });
 })();
